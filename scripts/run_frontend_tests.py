@@ -189,7 +189,7 @@ def main(args: Optional[Sequence[str]] = None) -> None:
 
     for attempt in range(MAX_ATTEMPTS):
         print(f'Attempt {attempt + 1} of {MAX_ATTEMPTS}')
-        print(cmd + '\n')
+        print(cmd)
         task = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         output_lines = []
         # The value of `process.stdout` should not be None since we passed
