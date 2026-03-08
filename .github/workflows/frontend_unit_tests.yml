@@ -66,7 +66,7 @@ jobs:
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Run frontend tests (attempt ${{ matrix.num_runs }})
         id: run_frontend_tests
-        run: python -m scripts.run_frontend_tests
+        run: python -m scripts.run_frontend_tests --check_coverage
       - name: Upload frontend coverage reports as an artifact
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
