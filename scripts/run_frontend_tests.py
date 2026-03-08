@@ -105,7 +105,7 @@ def get_file_spec(file_path: str) -> str | None:
 def main(args: Optional[Sequence[str]] = None) -> None:
     """Runs the frontend tests."""
     parsed_args = _PARSER.parse_args(args=args)
-
+    print(parsed_args)
     common.setup_chrome_bin_env_variable()
     # We need to create an empty hashes.json file for the build so that
     # we don't get the error "assets/hashes.json file doesn't exist".
@@ -129,9 +129,11 @@ def main(args: Optional[Sequence[str]] = None) -> None:
 
     specs_to_run: Set[str] = set()
     if parsed_args.specs_to_run:
+        print("Here in loop\n")
         for spec in parsed_args.specs_to_run.split(','):
             spec_file = get_file_spec(spec.strip())
             if spec_file:
+                print("adding " + spec_file + "\n")
                 specs_to_run.add(spec_file)
             elif not parsed_args.allow_no_spec:
                 raise ValueError('No spec file found for the file: %s' % spec)
@@ -187,6 +189,7 @@ def main(args: Optional[Sequence[str]] = None) -> None:
 
     for attempt in range(MAX_ATTEMPTS):
         print(f'Attempt {attempt + 1} of {MAX_ATTEMPTS}')
+        print(cmd + "\n")
         task = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         output_lines = []
         # The value of `process.stdout` should not be None since we passed
