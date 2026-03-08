@@ -97,7 +97,6 @@ describe('Curriculum Admin', function () {
       followNewTab: false,
       fps: 25,
       ffmpeg_Path: null,
-      // Below dimensions are of recorded video.
       videoFrame: {
         width: 1280,
         height: 720,
@@ -112,9 +111,8 @@ describe('Curriculum Admin', function () {
       },
       waitForFrameBeforeStart: 2000,
       waitForFrameAfterPageLoad: 2000,
-      maxRetries: 3, // Add retry mechanism.
+      maxRetries: 3,
       ffmpegFlags: [
-        // Additional ffmpeg flags for stability.
         '-movflags',
         '+faststart',
         '-max_muxing_queue_size',
@@ -126,7 +124,6 @@ describe('Curriculum Admin', function () {
       config
     );
     try {
-      // 1. Start recording
       await screenRecorder.start(videoPath);
 
       await curriculumAdmin.updateClassroom(
@@ -162,18 +159,15 @@ describe('Curriculum Admin', function () {
         null
       );
 
-      // If we reach here, no assertions failed
       testPassed = true;
     } catch (error) {
-      // Test failed - we do nothing here so the 'finally' block can handle it
       throw error;
     } finally {
       await screenRecorder.stop();
 
-      // 3. Discard if passed, keep if failed
-      // if (testPassed && fs.existsSync(videoPath)) {
-      // fs.unlinkSync(videoPath);
-      // }
+      if (testPassed && fs.existsSync(videoPath)) {
+        fs.unlinkSync(videoPath);
+      }
     }
   });
 
