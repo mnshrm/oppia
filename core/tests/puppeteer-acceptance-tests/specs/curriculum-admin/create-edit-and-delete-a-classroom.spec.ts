@@ -92,7 +92,6 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
-    fs;
     const videoPath = join(__dirname, 'test_recording.mp4');
     let testPassed = false;
     const config = {
