@@ -160,8 +160,6 @@ describe('Curriculum Admin', function () {
       );
 
       testPassed = true;
-    } catch (error) {
-      throw error;
     } finally {
       await screenRecorder.stop();
 
