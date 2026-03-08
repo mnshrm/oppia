@@ -28,6 +28,8 @@ import {TopicManager} from '../../utilities/user/topic-manager';
 import {join} from 'path';
 import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
 
+import * as fs from 'fs';
+
 const ROLES = testConstants.Roles;
 
 ConsoleReporter.setConsoleErrorsToIgnore([/[\s\S]*/]);
@@ -90,7 +92,7 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
-    const fs = require('fs');
+    fs;
     const videoPath = join(__dirname, 'test_recording.mp4');
     let testPassed = false;
     const config = {
