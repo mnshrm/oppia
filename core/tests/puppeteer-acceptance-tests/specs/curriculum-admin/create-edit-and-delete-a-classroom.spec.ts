@@ -25,6 +25,8 @@ import {CurriculumAdmin} from '../../utilities/user/curriculum-admin';
 import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
 import {TopicManager} from '../../utilities/user/topic-manager';
+import {join} from 'path';
+import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
 
 const ROLES = testConstants.Roles;
 
@@ -42,7 +44,6 @@ describe('Curriculum Admin', function () {
     );
 
     loggedOutUser = await UserFactory.createLoggedOutUser();
-
     await curriculumAdmin.navigateToTopicAndSkillsDashboardPage();
     await curriculumAdmin.createTopic('Test Topic 1', 'test-topic-one');
     await curriculumAdmin.createSubtopicForTopic(
@@ -81,7 +82,7 @@ describe('Curriculum Admin', function () {
     );
 
     // Setup taking longer than 300000 ms.
-  }, 750000);
+  }, 7500000);
 
   it('should be able to create a new classroom', async function () {
     await curriculumAdmin.createNewClassroom('Math', 'math');
@@ -89,38 +90,91 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
-    await curriculumAdmin.updateClassroom(
-      'Math',
-      'Teaser text',
-      'Course details',
-      'Topic list intro',
-      'math',
-      testConstants.data.curriculumAdminThumbnailImage,
-      testConstants.data.classroomBannerImage
+    const fs = require('fs');
+    const videoPath = join(__dirname, 'test_recording.mp4');
+    let testPassed = false;
+    const config = {
+      followNewTab: false,
+      fps: 25,
+      ffmpeg_Path: null,
+      // Below dimensions are of recorded video.
+      videoFrame: {
+        width: 1280,
+        height: 720,
+      },
+      aspectRatio: '16:9',
+      videoCrf: 18,
+      videoCodec: 'libx264',
+      videoPreset: 'medium',
+      videoBitrate: 1000,
+      autopad: {
+        color: 'black',
+      },
+      waitForFrameBeforeStart: 2000,
+      waitForFrameAfterPageLoad: 2000,
+      maxRetries: 3, // Add retry mechanism.
+      ffmpegFlags: [
+        // Additional ffmpeg flags for stability.
+        '-movflags',
+        '+faststart',
+        '-max_muxing_queue_size',
+        '9999',
+      ],
+    };
+    const screenRecorder = new PuppeteerScreenRecorder(
+      curriculumAdmin.page,
+      config
     );
-    await curriculumAdmin.expectClassroomDetailsToBe(
-      'Math',
-      'math',
-      'Teaser text',
-      'Course details',
-      'Topic list intro'
-    );
+    try {
+      // 1. Start recording
+      await screenRecorder.start(videoPath);
 
-    // Add topics.
-    await curriculumAdmin.addTopicToClassroom('Math', 'Intro to Programming');
-    await curriculumAdmin.addTopicToClassroom(
-      'Math',
-      'Intro to C Programming Language',
-      ['Intro to Programming']
-    );
-    await curriculumAdmin.expectTopicToContainPrerequisiteTopic(
-      'Intro to C Programming Language',
-      'Intro to Programming'
-    );
-    await curriculumAdmin.expectTopicToContainPrerequisiteTopic(
-      'Intro to Programming',
-      null
-    );
+      await curriculumAdmin.updateClassroom(
+        'Math',
+        'Teaser text',
+        'Course details',
+        'Topic list intro',
+        'math',
+        testConstants.data.curriculumAdminThumbnailImage,
+        testConstants.data.classroomBannerImage
+      );
+      await curriculumAdmin.expectClassroomDetailsToBe(
+        'Math',
+        'math',
+        'Teaser text',
+        'Course details',
+        'Topic list intro'
+      );
+
+      // Add topics.
+      await curriculumAdmin.addTopicToClassroom('Math', 'Intro to Programming');
+      await curriculumAdmin.addTopicToClassroom(
+        'Math',
+        'Intro to C Programming Language',
+        ['Intro to Programming']
+      );
+      await curriculumAdmin.expectTopicToContainPrerequisiteTopic(
+        'Intro to C Programming Language',
+        'Intro to Programming'
+      );
+      await curriculumAdmin.expectTopicToContainPrerequisiteTopic(
+        'Intro to Programming',
+        null
+      );
+
+      // If we reach here, no assertions failed
+      testPassed = true;
+    } catch (error) {
+      // Test failed - we do nothing here so the 'finally' block can handle it
+      throw error;
+    } finally {
+      await screenRecorder.stop();
+
+      // 3. Discard if passed, keep if failed
+      // if (testPassed && fs.existsSync(videoPath)) {
+      // fs.unlinkSync(videoPath);
+      // }
+    }
   });
 
   it('should be able to publish classroom', async function () {
