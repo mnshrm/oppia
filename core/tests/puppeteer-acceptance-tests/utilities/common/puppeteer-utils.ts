@@ -193,6 +193,7 @@ export class BaseUser {
 
           // Ensure recording is stopped when the test fails.
           process.on('SIGTERM', async () => {
+            console.log('HERE IN SIGTERM HOOK');
             await this.screenRecorder.stop();
           });
           process.on('SIGINT', async () => {
@@ -700,6 +701,7 @@ export class BaseUser {
         if (configData.testFailureDetected) {
           fs.unlinkSync(CONFIG_FILE);
           // Signal all BaseUser instances to take screenshots.
+          console.log('TRying to capture screenshots$$$$$$$$$$$$$$$$$$$$$$$$');
           await this.captureScreenshotsForFailedTest();
         }
       } catch (error) {

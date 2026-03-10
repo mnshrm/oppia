@@ -99,6 +99,7 @@ describe('Curriculum Admin', function () {
   );
 
   afterAll(async function () {
+    console.log('@@@@@@@@@@@@@@@@@@Here in afterAll method@@@@@@@@@@@2');
     await UserFactory.closeAllBrowsers();
   });
 });
