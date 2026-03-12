@@ -143,6 +143,10 @@ export class BaseUser {
           this.page.setViewport({width: 1920, height: 1080});
         }
 
+        this.page.on('popup', page => {
+          showMessage('A new popup was opened!');
+        });
+
         // Enable Video Recording.
         if (process.env.VIDEO_RECORDING_IS_ENABLED === '1') {
           const uniqueString = Math.random().toString(36).substring(2, 8);
