@@ -21,6 +21,7 @@ import testConstants from '../../utilities/common/test-constants';
 import {CurriculumAdmin} from '../../utilities/user/curriculum-admin';
 // import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
+import {SuperAdmin} from '../../utilities/user/super-admin';
 
 const DEFAULT_SPEC_TIMEOUT_MSECS = testConstants.DEFAULT_SPEC_TIMEOUT_MSECS;
 const ROLES = testConstants.Roles;
@@ -37,7 +38,7 @@ describe('Curriculum Admin', function () {
       'curriculum_admin@example.com',
       [ROLES.CURRICULUM_ADMIN]
     );
-
+    await curriculumAdmin.checkAllSessions();
     // loggedOutUser = await UserFactory.createLoggedOutUser();
 
     await curriculumAdmin.navigateToTopicAndSkillsDashboardPage();
@@ -47,7 +48,6 @@ describe('Curriculum Admin', function () {
       'test-subtopic-one',
       'Test Topic 1'
     );
-
     await curriculumAdmin.createSkillForTopic(
       'Test Skill 1',
       'Test Topic 1',
@@ -99,7 +99,6 @@ describe('Curriculum Admin', function () {
   );
 
   afterAll(async function () {
-    console.log('@@@@@@@@@@@@@@@@@@Here in afterAll method@@@@@@@@@@@2');
     await UserFactory.closeAllBrowsers();
   });
 });

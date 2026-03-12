@@ -293,6 +293,22 @@ const mobilePreviewTab = '.e2e-test-mobile-preview-tab';
 const navigationDropdown = '.e2e-test-mobile-skill-nav-dropdown-icon';
 
 export class CurriculumAdmin extends BaseUser {
+  async checkAllSessions() {
+    const sessions = this.screenRecorder.getSessions();
+    showMessage(`${sessions.length}`);
+    await Promise.all(
+      sessions.map(async session => {
+        try {
+          await session!.send('Runtime.getIsolateId');
+        } catch (err: any) {
+          showMessage(
+            `Session ${session!.id()} is not healthy: ${err.message}`
+          );
+        }
+      })
+    );
+  }
+
   /**
    * Navigate to the topic and skills dashboard page.
    */
@@ -503,7 +519,10 @@ export class CurriculumAdmin extends BaseUser {
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
     await this.clickOn(createTopicButton);
 
+    await this.checkAllSessions();
+
     await this.page.waitForSelector('.e2e-test-topics-table');
+    await this.checkAllSessions();
     await this.openTopicEditor(name);
     await this.page.waitForSelector(topicMetaTagInput);
     await this.page.focus(topicMetaTagInput);
@@ -667,6 +686,7 @@ export class CurriculumAdmin extends BaseUser {
 
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
     await this.clickOn(createSubtopicButton);
+    await this.checkAllSessions();
     await this.saveTopicDraft(topicName);
     showMessage(`Subtopic ${title} is created.`);
   }

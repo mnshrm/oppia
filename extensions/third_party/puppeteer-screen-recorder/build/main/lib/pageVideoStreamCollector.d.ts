@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { Page } from 'puppeteer';
+import { CDPSession, Page } from 'puppeteer';
 import { PuppeteerScreenRecorderOptions } from './pageVideoStreamTypes';
 /**
  * @ignore
@@ -25,4 +25,5 @@ export declare class pageVideoStreamCollector extends EventEmitter {
   private endSession;
   start(): Promise<void>;
   stop(): Promise<boolean>;
+  getSessionsStack(): [CDPSession?];
 }
