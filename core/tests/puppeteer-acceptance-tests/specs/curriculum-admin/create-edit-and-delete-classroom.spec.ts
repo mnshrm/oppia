@@ -38,7 +38,6 @@ describe('Curriculum Admin', function () {
       'curriculum_admin@example.com',
       [ROLES.CURRICULUM_ADMIN]
     );
-    await curriculumAdmin.checkAllSessions();
     // loggedOutUser = await UserFactory.createLoggedOutUser();
 
     await curriculumAdmin.navigateToTopicAndSkillsDashboardPage();
