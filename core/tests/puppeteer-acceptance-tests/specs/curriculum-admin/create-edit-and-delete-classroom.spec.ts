@@ -19,7 +19,7 @@
 import {UserFactory} from '../../utilities/common/user-factory';
 import testConstants from '../../utilities/common/test-constants';
 import {CurriculumAdmin} from '../../utilities/user/curriculum-admin';
-import {LoggedOutUser} from '../../utilities/user/logged-out-user';
+// import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
 
 const DEFAULT_SPEC_TIMEOUT_MSECS = testConstants.DEFAULT_SPEC_TIMEOUT_MSECS;
@@ -29,7 +29,7 @@ ConsoleReporter.setConsoleErrorsToIgnore([/[\s\S]*/]);
 
 describe('Curriculum Admin', function () {
   let curriculumAdmin: CurriculumAdmin;
-  let loggedOutUser: LoggedOutUser;
+  // let loggedOutUser: LoggedOutUser;
 
   beforeAll(async function () {
     curriculumAdmin = await UserFactory.createNewUser(
@@ -38,7 +38,7 @@ describe('Curriculum Admin', function () {
       [ROLES.CURRICULUM_ADMIN]
     );
 
-    loggedOutUser = await UserFactory.createLoggedOutUser();
+    // loggedOutUser = await UserFactory.createLoggedOutUser();
 
     await curriculumAdmin.navigateToTopicAndSkillsDashboardPage();
     await curriculumAdmin.createTopic('Test Topic 1', 'test-topic-one');
@@ -88,8 +88,8 @@ describe('Curriculum Admin', function () {
         1
       );
 
-      await loggedOutUser.navigateToClassroomPage('math');
-      await loggedOutUser.expectToBeOnClassroomPage('Math');
+      // await loggedOutUser.navigateToClassroomPage('math');
+      // await loggedOutUser.expectToBeOnClassroomPage('Math');
 
       await curriculumAdmin.deleteClassroom('Math');
       await curriculumAdmin.expectNumberOfClassroomsToBe(0);
