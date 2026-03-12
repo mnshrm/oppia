@@ -26,8 +26,6 @@ import {SuperAdmin} from '../../utilities/user/super-admin';
 const DEFAULT_SPEC_TIMEOUT_MSECS = testConstants.DEFAULT_SPEC_TIMEOUT_MSECS;
 const ROLES = testConstants.Roles;
 
-ConsoleReporter.setConsoleErrorsToIgnore([/[\s\S]*/]);
-
 describe('Curriculum Admin', function () {
   let curriculumAdmin: CurriculumAdmin;
   // let loggedOutUser: LoggedOutUser;
