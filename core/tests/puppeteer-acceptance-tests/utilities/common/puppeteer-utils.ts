@@ -146,6 +146,9 @@ export class BaseUser {
         this.page.on('popup', page => {
           showMessage('A new popup was opened!');
         });
+        this.page.on('close', () => {
+          showMessage('A page was closed!');
+        });
 
         // Enable Video Recording.
         if (process.env.VIDEO_RECORDING_IS_ENABLED === '1') {
