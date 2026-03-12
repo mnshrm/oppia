@@ -144,7 +144,7 @@ export class BaseUser {
         }
 
         this.page.on('popup', page => {
-          showMessage('A new popup was opened!');
+          showMessage('A new popup was opened! with URL ' + page.url());
         });
         this.page.on('close', () => {
           showMessage('A page was closed!');
