@@ -90,10 +90,14 @@ export class pageVideoStreamCollector extends EventEmitter {
       return;
     }
     try {
-      await this.stopScreenCast();
       showMessage('Starting screen cast for page: ' + page.url());
+      await this.stopScreenCast();
     } catch (e: any) {
-      console.warn('Error stopping existing screen cast session', e!.message);
+      showMessage(
+        'Error stopping existing screen cast session for ' +
+          page.url() +
+          e!.message
+      );
     }
     this.sessionsStack.push(pageSession);
     this.handleScreenCastFrame(pageSession);
