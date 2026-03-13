@@ -98,3 +98,13 @@ jobs:
           viewport-type: ${{ matrix.viewport-type }}
           enable-screen-recording: true
           modified-suite-name-for-uploads: ${{ steps.generate_suite_name_for_artifacts.outputs.MODIFIED_SUITE_NAME }}
+      - name: Upload CDP Protocol Error Logs
+        # 'if: always()' ensures the log is uploaded even if the test fails or crashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdp-logs-${{ steps.generate_suite_name_for_artifacts.outputs.MODIFIED_SUITE_NAME }}
+          path: extension/third_party/puppeteer-screen-recorder/cdp-protocol-errors.log
+          # Optional: if the file is missing (no errors occurred), don't fail the workflow
+          if-no-files-found: ignore
+          retention-days: 5

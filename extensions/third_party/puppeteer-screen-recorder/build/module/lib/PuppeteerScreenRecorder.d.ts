@@ -82,5 +82,4 @@ export declare class PuppeteerScreenRecorder {
    * @returns indicate whether stop is completed correct or not, if true without any error else false.
    */
   stop(): Promise<boolean>;
-  getSessions(): [import('puppeteer').CDPSession?];
 }
