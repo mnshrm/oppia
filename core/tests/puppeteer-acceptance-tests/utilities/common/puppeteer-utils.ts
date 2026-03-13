@@ -110,6 +110,7 @@ export class BaseUser {
          * headless mode. As per the expected behavior we need to make sure
          * every test passes on both modes. */
         headless,
+        dumpio: true,
         args,
       })
       .then(async browser => {
