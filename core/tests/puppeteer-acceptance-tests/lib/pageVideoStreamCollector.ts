@@ -81,7 +81,12 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!currentSession) {
       return;
     }
-    await currentSession.send('Page.stopScreencast');
+    try {
+      showMessage('Stopping current screencast session: ' + this.page.url());
+      await currentSession.send('Page.stopScreencast');
+    } catch (e: any) {
+      showMessage('Error stopping screencast' + e!.message);
+    }
   }
 
   private async startSession(page: Page): Promise<void> {
@@ -89,16 +94,7 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!pageSession) {
       return;
     }
-    try {
-      showMessage('Starting screen cast for page: ' + page.url());
-      await this.stopScreenCast();
-    } catch (e: any) {
-      showMessage(
-        'Error stopping existing screen cast session for ' +
-          page.url() +
-          e!.message
-      );
-    }
+    await this.stopScreenCast();
     this.sessionsStack.push(pageSession);
     this.handleScreenCastFrame(pageSession);
     await this.startScreenCast(true);
