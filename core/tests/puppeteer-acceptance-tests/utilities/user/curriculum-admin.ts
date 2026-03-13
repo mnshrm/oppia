@@ -502,7 +502,32 @@ export class CurriculumAdmin extends BaseUser {
     await this.page.waitForSelector(`${uploadPhotoButton}:not([disabled])`);
     await this.clickOn(uploadPhotoButton);
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
+    const client = await this.page.target().createCDPSession();
+    const {result} = await client.send('Runtime.evaluate', {
+      expression: 'window',
+    });
+    const {listeners} = await client.send('DOMDebugger.getEventListeners', {
+      objectId: result.objectId!,
+    });
+    this.page.removeAllListeners('popup');
+    const popupHandled = new Promise<void>(resolve => {
+      this.page.once('popup', async newPage => {
+        try {
+          await newPage.close();
+        } catch (e) {
+        } finally {
+          resolve();
+        }
+      });
+    });
+
     await this.clickOn(createTopicButton);
+
+    await popupHandled;
+
+    for (const listener of listeners) {
+      this.page.on('popup', listener as any);
+    }
 
     await this.page.waitForSelector('.e2e-test-topics-table');
     await this.openTopicEditor(name);
