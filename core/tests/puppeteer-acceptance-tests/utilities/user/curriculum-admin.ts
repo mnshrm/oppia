@@ -19,6 +19,7 @@
 import {BaseUser} from '../common/puppeteer-utils';
 import testConstants from '../common/test-constants';
 import {showMessage} from '../common/show-message';
+import {Page, Puppeteer} from 'puppeteer';
 
 const curriculumAdminThumbnailImage =
   testConstants.data.curriculumAdminThumbnailImage;
@@ -2190,6 +2191,9 @@ export class CurriculumAdmin extends BaseUser {
     await this.type(richTextAreaField, reviewMaterial);
     await this.addWorkedExampleRteComponent('Type the number one', '1');
     await this.clickOn(createSkillButton);
+    const pages = await this.browserObject.pages();
+    const newPage = pages[pages.length - 1];
+    await this.closeNewPopup(newPage);
     await this.openSkillEditor(description);
   }
 
@@ -2474,6 +2478,11 @@ export class CurriculumAdmin extends BaseUser {
     );
     await this.addTopicToClassroom(classroomName, topicToBeAssigned);
     await this.publishClassroom(classroomName);
+  }
+
+  async closeNewPopup(newPage: Page): Promise<void> {
+    await newPage.close();
+    showMessage('Closed the newly opened page.');
   }
 }
 
