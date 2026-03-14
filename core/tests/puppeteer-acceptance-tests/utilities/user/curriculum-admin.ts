@@ -20,6 +20,7 @@ import {BaseUser} from '../common/puppeteer-utils';
 import testConstants from '../common/test-constants';
 import {showMessage} from '../common/show-message';
 import {Page, Puppeteer} from 'puppeteer';
+import {EventEmitter} from 'stream';
 
 const curriculumAdminThumbnailImage =
   testConstants.data.curriculumAdminThumbnailImage;
@@ -502,14 +503,17 @@ export class CurriculumAdmin extends BaseUser {
     await this.page.waitForSelector(`${uploadPhotoButton}:not([disabled])`);
     await this.clickOn(uploadPhotoButton);
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
-    const client = await this.page.target().createCDPSession();
-    const {result} = await client.send('Runtime.evaluate', {
-      expression: 'window',
-    });
-    const {listeners} = await client.send('DOMDebugger.getEventListeners', {
-      objectId: result.objectId!,
-    });
+    // const client = await this.page.target().createCDPSession();
+    // const {result} = await client.send('Runtime.evaluate', {
+    //   expression: 'window',
+    // });
+    // const {listeners} = await client.send('DOMDebugger.getEventListeners', {
+    //   objectId: result.objectId!,
+    // });
+    const pageEmitter = this.page as unknown as EventEmitter;
+    const listeners = pageEmitter.listeners('popup');
     this.page.removeAllListeners('popup');
+
     const popupHandled = new Promise<void>(resolve => {
       this.page.once('popup', async newPage => {
         try {
