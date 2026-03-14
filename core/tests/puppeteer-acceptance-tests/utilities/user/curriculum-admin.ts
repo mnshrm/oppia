@@ -2439,7 +2439,9 @@ export class CurriculumAdmin extends TopicManager {
     await this.clickOnElementWithSelector(openTopicDropdownButton);
     await this.clickOnElementWithSelector(topicDropDownFormField);
     await this.page.waitForSelector(addTopicFormFieldInput);
-    await this.page.type(addTopicFormFieldInput, topicName);
+    const elements = await this.page.$$(addTopicFormFieldInput);
+    elements[elements.length - 1].type(topicName);
+    // await this.page.type(addTopicFormFieldInput, topicName);
     await this.clickOnElementWithSelector(topicSelector);
     await this.page.waitForSelector(openTopicDropdownButton);
 
