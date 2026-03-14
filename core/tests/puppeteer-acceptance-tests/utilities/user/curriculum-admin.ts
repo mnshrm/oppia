@@ -2422,6 +2422,10 @@ export class CurriculumAdmin extends TopicManager {
     }
   }
 
+  sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   /**
    * Function for adding a topic to a classroom.
    * @param {string} classroomName - The name of the classroom.
@@ -2439,6 +2443,7 @@ export class CurriculumAdmin extends TopicManager {
     await this.clickOnElementWithSelector(openTopicDropdownButton);
     await this.clickOnElementWithSelector(topicDropDownFormField);
     await this.page.waitForSelector(addTopicFormFieldInput);
+    await this.sleep(3000);
     const elements = await this.page.$$(addTopicFormFieldInput);
     elements[elements.length - 1].type(topicName);
     // await this.page.type(addTopicFormFieldInput, topicName);
