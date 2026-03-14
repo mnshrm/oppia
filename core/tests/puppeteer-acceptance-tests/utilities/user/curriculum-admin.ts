@@ -19,7 +19,7 @@
 import {BaseUser} from '../common/puppeteer-utils';
 import testConstants from '../common/test-constants';
 import {showMessage} from '../common/show-message';
-import {Page, Puppeteer} from 'puppeteer';
+import {Page, Puppeteer, Target} from 'puppeteer';
 import {EventEmitter} from 'stream';
 
 const curriculumAdminThumbnailImage =
@@ -510,28 +510,25 @@ export class CurriculumAdmin extends BaseUser {
     // const {listeners} = await client.send('DOMDebugger.getEventListeners', {
     //   objectId: result.objectId!,
     // });
-    const pageEmitter = this.page as unknown as EventEmitter;
-    const listeners = pageEmitter.listeners('popup');
-    this.page.removeAllListeners('popup');
+    // this.page.removeAllListeners('popup');
+    // this.page.once('popup', async newPage => {
+    //     await newPage.close();
+    // });
 
-    const popupHandled = new Promise<void>(resolve => {
-      this.page.once('popup', async newPage => {
-        try {
+    const preventPopup = async (target: Target) => {
+      if (target.type() === 'page') {
+        const newPage = await target.page();
+        if (newPage) {
           await newPage.close();
-        } catch (e) {
-        } finally {
-          resolve();
         }
-      });
-    });
-
+      }
+    };
+    this.browserObject.once('targetcreated', preventPopup);
     await this.clickOn(createTopicButton);
 
-    await popupHandled;
-
-    for (const listener of listeners) {
-      this.page.on('popup', listener as any);
-    }
+    // for (const listener of listeners) {
+    // this.page.on('popup', listener as any);
+    // }
 
     await this.page.waitForSelector('.e2e-test-topics-table');
     await this.openTopicEditor(name);
