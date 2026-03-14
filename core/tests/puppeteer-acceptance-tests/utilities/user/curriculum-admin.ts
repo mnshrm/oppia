@@ -200,7 +200,7 @@ const viewTopicGraphButton = 'button.view-graph-button';
 const topicDependencyGraphDiv = '.e2e-test-topic-dependency-graph-container';
 const topicNode = '.e2e-test-topic-node';
 const closeTopicDependencyButton = '.e2e-test-close-topic-dependency-modal';
-const addTopicFormFieldInput = '.mat-select-search-input';
+const addTopicFormFieldInput = '.e2e-test-classroom-new-topic-add';
 const createNewTopicButton = '.e2e-test-create-topic-button';
 const createNewTopicMobileButton = '.e2e-test-create-topic-mobile-button';
 
