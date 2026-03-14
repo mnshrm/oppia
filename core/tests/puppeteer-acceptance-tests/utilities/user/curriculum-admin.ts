@@ -519,6 +519,7 @@ export class CurriculumAdmin extends BaseUser {
       if (target.type() === 'page') {
         const newPage = await target.page();
         if (newPage) {
+          showMessage('Closing popup window opened on topic creation.');
           await newPage.close();
         }
       }
