@@ -808,6 +808,7 @@ export class CurriculumAdmin extends TopicManager {
       showMessage(`A popup happened for ${newPage.url()}`);
     });
     await this.clickOnElementWithSelector(createTopicButton);
+    await this.waitForNetworkIdle();
     showMessage('Create topic button clicked!!');
 
     await this.page.waitForSelector('.e2e-test-topics-table');
