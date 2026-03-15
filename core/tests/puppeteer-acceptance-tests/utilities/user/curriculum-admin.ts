@@ -22,6 +22,7 @@ import {TopicManager} from './topic-manager';
 import puppeteer from 'puppeteer';
 import {ElementHandle} from 'puppeteer';
 import {ExplorationEditorModal} from '../common/exploration-editor';
+import {elementIsNotSelected} from 'selenium-webdriver/lib/until';
 
 const curriculumAdminThumbnailImage =
   testConstants.data.curriculumAdminThumbnailImage;
@@ -199,7 +200,7 @@ const viewTopicGraphButton = 'button.view-graph-button';
 const topicDependencyGraphDiv = '.e2e-test-topic-dependency-graph-container';
 const topicNode = '.e2e-test-topic-node';
 const closeTopicDependencyButton = '.e2e-test-close-topic-dependency-modal';
-const addTopicFormFieldInput = '.e2e-test-classroom-new-topic-add';
+const addTopicFormFieldInput = '.mat-input-element';
 const createNewTopicButton = '.e2e-test-create-topic-button';
 const createNewTopicMobileButton = '.e2e-test-create-topic-mobile-button';
 
@@ -2426,8 +2427,23 @@ export class CurriculumAdmin extends TopicManager {
 
     await this.clickOnElementWithSelector(openTopicDropdownButton);
     await this.clickOnElementWithSelector(topicDropDownFormField);
+    // await this.page.waitForTimeout(2000);
+    // const prerequistes = await this.page.$$(topicPrerequisitesContainerSelector);
+    // const numOfPrerequisites = prerequistes.length;
+    // showMessage(`Number of prerequisites present are ${numOfPrerequisites}.`);
+    // if(numOfPrerequisites > 0) {
+    //   await this.page.waitForFunction((addTopicSearchInputLocator: string) => document.querySelectorAll(addTopicSearchInputLocator).length === (numOfPrerequisites + 1),
+    //   {},
+    //   addTopicFormFieldInput
+    //   );
+    // }
+    // const elements = await this.page.$$(addTopicFormFieldInput);
+    // showMessage(`Number of topic search input fields are ${elements.length}.`);
+    // elements[numOfPrerequisites].type(topicName);
     await this.page.waitForSelector(addTopicFormFieldInput);
-    await this.page.type(addTopicFormFieldInput, topicName);
+    const elements = await this.page.$$(addTopicFormFieldInput);
+    await elements[elements.length - 1].type(topicName);
+    // await this.page.type(addTopicFormFieldInput, topicName);
     await this.clickOnElementWithSelector(topicSelector);
     await this.page.waitForSelector(openTopicDropdownButton);
 
