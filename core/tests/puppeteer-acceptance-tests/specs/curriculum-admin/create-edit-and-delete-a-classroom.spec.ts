@@ -26,6 +26,7 @@ import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
 import {TopicManager} from '../../utilities/user/topic-manager';
 import path from 'path';
+import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
 
 const ROLES = testConstants.Roles;
 
@@ -90,9 +91,41 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
-    await curriculumAdmin.screenRecorder.start(
-      path.join(__dirname, 'test_recording.mp4')
+    const config = {
+      followNewTab: false,
+      fps: 25,
+      ffmpeg_Path: null,
+      // Below dimensions are of recorded video.
+      videoFrame: {
+        width: 1280,
+        height: 720,
+      },
+      aspectRatio: '16:9',
+      videoCrf: 18,
+      videoCodec: 'libx264',
+      videoPreset: 'medium',
+      videoBitrate: 1000,
+      autopad: {
+        color: 'black',
+      },
+      waitForFrameBeforeStart: 2000,
+      waitForFrameAfterPageLoad: 2000,
+      maxRetries: 3, // Add retry mechanism.
+      ffmpegFlags: [
+        // Additional ffmpeg flags for stability.
+        '-movflags',
+        '+faststart',
+        '-max_muxing_queue_size',
+        '9999',
+      ],
+    };
+
+    const screenRecorder = new PuppeteerScreenRecorder(
+      curriculumAdmin.page,
+      config
     );
+
+    await screenRecorder.start(path.join(__dirname, 'test_recording.mp4'));
     await curriculumAdmin.updateClassroom(
       'Math',
       'Teaser text',
@@ -125,7 +158,7 @@ describe('Curriculum Admin', function () {
       'Intro to Programming',
       null
     );
-    await curriculumAdmin.screenRecorder.stop();
+    await screenRecorder.stop();
   });
 
   it('should be able to publish classroom', async function () {
