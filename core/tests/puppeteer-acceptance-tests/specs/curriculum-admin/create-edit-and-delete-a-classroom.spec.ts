@@ -25,6 +25,7 @@ import {CurriculumAdmin} from '../../utilities/user/curriculum-admin';
 import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
 import {TopicManager} from '../../utilities/user/topic-manager';
+import path from 'path';
 
 const ROLES = testConstants.Roles;
 
@@ -89,7 +90,9 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
-    await curriculumAdmin.screenRecorder.start('test_recording.mp4');
+    await curriculumAdmin.screenRecorder.start(
+      path.join(__dirname, 'test_recording.mp4')
+    );
     await curriculumAdmin.updateClassroom(
       'Math',
       'Teaser text',
