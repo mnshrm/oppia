@@ -89,6 +89,7 @@ describe('Curriculum Admin', function () {
   });
 
   it('should be able to edit classroom information', async function () {
+    await curriculumAdmin.screenRecorder.start('test_recording.mp4');
     await curriculumAdmin.updateClassroom(
       'Math',
       'Teaser text',
@@ -121,6 +122,7 @@ describe('Curriculum Admin', function () {
       'Intro to Programming',
       null
     );
+    await curriculumAdmin.screenRecorder.stop();
   });
 
   it('should be able to publish classroom', async function () {

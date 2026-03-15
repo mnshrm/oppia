@@ -109,3 +109,11 @@ runs:
       with:
         name: video-recordings_${{ inputs.modified-suite-name-for-uploads }}
         path: /home/runner/work/oppia/oppia_full_stack_test_video_recordings/acceptance/${{ inputs.viewport-type == 'mobile' && 'mobile' || 'desktop' }}-*
+    - name: Upload Curriculum Admin Test Recording
+      if: ${{ !cancelled() && steps.run-acceptance-test.outcome == 'failure' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: video-recording-curriculum-admin
+        path: /home/runner/work/oppia/core/tests/puppeteer-acceptance-tests/specs/curriculum-admin/test_recording.mp4
+        if-no-files-found: warn
+        retention-days: 7
