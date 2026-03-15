@@ -804,7 +804,11 @@ export class CurriculumAdmin extends TopicManager {
     await this.page.waitForSelector(`${uploadPhotoButton}:not([disabled])`);
     await this.clickOnElementWithSelector(uploadPhotoButton);
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
+    this.page.on('popup', (newPage: puppeteer.Page) => {
+      showMessage(`A popup happened for ${newPage.url()}`);
+    });
     await this.clickOnElementWithSelector(createTopicButton);
+    showMessage('Create topic button clicked!!');
 
     await this.page.waitForSelector('.e2e-test-topics-table');
     await this.openTopicEditor(name);

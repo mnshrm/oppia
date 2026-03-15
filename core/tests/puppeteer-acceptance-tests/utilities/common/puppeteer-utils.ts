@@ -27,7 +27,7 @@ var path = require('path');
 var fs = require('fs');
 
 import {toMatchImageSnapshot} from 'jest-image-snapshot';
-import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
+import {PuppeteerScreenRecorder} from '../../lib/PuppeteerScreenRecorder';
 expect.extend({toMatchImageSnapshot});
 const backgroundBanner = '.oppia-background-image';
 const libraryBanner = '.e2e-test-library-banner';
