@@ -2427,23 +2427,9 @@ export class CurriculumAdmin extends TopicManager {
 
     await this.clickOnElementWithSelector(openTopicDropdownButton);
     await this.clickOnElementWithSelector(topicDropDownFormField);
-    // await this.page.waitForTimeout(2000);
-    // const prerequistes = await this.page.$$(topicPrerequisitesContainerSelector);
-    // const numOfPrerequisites = prerequistes.length;
-    // showMessage(`Number of prerequisites present are ${numOfPrerequisites}.`);
-    // if(numOfPrerequisites > 0) {
-    //   await this.page.waitForFunction((addTopicSearchInputLocator: string) => document.querySelectorAll(addTopicSearchInputLocator).length === (numOfPrerequisites + 1),
-    //   {},
-    //   addTopicFormFieldInput
-    //   );
-    // }
-    // const elements = await this.page.$$(addTopicFormFieldInput);
-    // showMessage(`Number of topic search input fields are ${elements.length}.`);
-    // elements[numOfPrerequisites].type(topicName);
     await this.page.waitForSelector(addTopicFormFieldInput);
     const elements = await this.page.$$(addTopicFormFieldInput);
     await elements[elements.length - 1].type(topicName);
-    // await this.page.type(addTopicFormFieldInput, topicName);
     await this.clickOnElementWithSelector(topicSelector);
     await this.page.waitForSelector(openTopicDropdownButton);
 
