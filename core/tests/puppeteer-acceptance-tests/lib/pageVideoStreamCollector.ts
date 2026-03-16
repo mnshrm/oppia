@@ -87,7 +87,7 @@ export class pageVideoStreamCollector extends EventEmitter {
 
   private async startSession(page: Page): Promise<void> {
     const pageSession = await this.getPageSession(page);
-    pageSession?.on('detached', (reason: string) => {
+    pageSession?.on('Inspector.detached', (reason: string) => {
       showMessage('Session detached for page: ' + page.url() + reason);
     });
     if (!pageSession) {
