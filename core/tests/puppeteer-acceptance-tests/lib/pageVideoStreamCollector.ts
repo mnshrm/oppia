@@ -81,12 +81,15 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!currentSession) {
       return;
     }
-      showMessage('Stopping current screencast session: ' + this.page.url());
-      await currentSession.send('Page.stopScreencast');
+    showMessage('Stopping current screencast session: ' + this.page.url());
+    await currentSession.send('Page.stopScreencast');
   }
 
   private async startSession(page: Page): Promise<void> {
     const pageSession = await this.getPageSession(page);
+    pageSession?.on('detached', (reason: string) => {
+      showMessage('Session detached for page: ' + reason);
+    });
     if (!pageSession) {
       return;
     }
