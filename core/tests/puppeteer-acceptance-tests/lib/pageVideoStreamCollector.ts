@@ -81,15 +81,22 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!currentSession) {
       return;
     }
+    currentSession.on('Log.entryAdded', log => {
+          showMessage("CDP session logs \n")
+          showMessage(log.source);
+          showMessage(log.level);
+          showMessage(log.text);
+          showMessage(log.category);
+        });
+    currentSession.on('Inspector.detached', (reason: string) => {
+      showMessage('Session detached for page: ' + this.page.url() + reason);
+    });
     showMessage('Stopping current screencast session: ' + this.page.url());
     await currentSession.send('Page.stopScreencast');
   }
 
   private async startSession(page: Page): Promise<void> {
     const pageSession = await this.getPageSession(page);
-    pageSession?.on('Inspector.detached', (reason: string) => {
-      showMessage('Session detached for page: ' + page.url() + reason);
-    });
     if (!pageSession) {
       return;
     }
