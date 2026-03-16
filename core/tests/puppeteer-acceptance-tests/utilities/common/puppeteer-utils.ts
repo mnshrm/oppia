@@ -140,7 +140,7 @@ export class BaseUser {
           await this.page.setViewport({
             width: 375,
             height: 667,
-            deviceScaleFactor: 2,
+            // deviceScaleFactor: 2,
             isMobile: true,
             hasTouch: true,
             isLandscape: false,
