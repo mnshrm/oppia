@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 
-import {CDPSession, Page} from 'puppeteer';
+import {CDPSession, Page, Puppeteer} from 'puppeteer';
 
 import {PuppeteerScreenRecorderOptions} from './pageVideoStreamTypes';
 import path from 'path';
@@ -52,7 +52,10 @@ export class pageVideoStreamCollector extends EventEmitter {
 
   private async registerTabListener(newPage: Page): Promise<void> {
     await this.startSession(newPage);
-    newPage.once('close', async () => await this.endSession());
+    newPage.once('close', async () => {
+      showMessage('Popup closed: ' + newPage.url());
+      await this.endSession()
+    });
   }
 
   private async startScreenCast(shouldDeleteSessionOnFailure = false) {
@@ -81,22 +84,15 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!currentSession) {
       return;
     }
-    currentSession.on('Log.entryAdded', log => {
-          showMessage("CDP session logs \n")
-          showMessage(log.source);
-          showMessage(log.level);
-          showMessage(log.text);
-          showMessage(log.category);
-        });
-    currentSession.on('Inspector.detached', (reason: string) => {
-      showMessage('Session detached for page: ' + this.page.url() + reason);
-    });
     showMessage('Stopping current screencast session: ' + this.page.url());
     await currentSession.send('Page.stopScreencast');
   }
 
   private async startSession(page: Page): Promise<void> {
     const pageSession = await this.getPageSession(page);
+    pageSession?.on('*', (event) => {
+      showMessage(`Event: ${event} received from page: ${page.url()}`);
+    })
     if (!pageSession) {
       return;
     }
