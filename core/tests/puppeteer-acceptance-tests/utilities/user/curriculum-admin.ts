@@ -804,13 +804,6 @@ export class CurriculumAdmin extends TopicManager {
     await this.page.waitForSelector(`${uploadPhotoButton}:not([disabled])`);
     await this.clickOnElementWithSelector(uploadPhotoButton);
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
-    
-    session.on('Target.targetDestroyed', (target: puppeteer.Target) => {
-      showMessage('A target got destroyed' + target.url());
-    });
-    session.on('Target.detachedFromTarget', (target: puppeteer.Target) => {
-      showMessage('A target got detached' + target.url());
-    });
     this.page.on('popup', (newPage: puppeteer.Page) => {
       showMessage(`A popup happened for ${newPage.url()}`);
     });
