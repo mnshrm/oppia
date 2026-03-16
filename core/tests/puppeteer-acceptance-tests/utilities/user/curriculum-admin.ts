@@ -806,6 +806,7 @@ export class CurriculumAdmin extends TopicManager {
     await this.page.waitForSelector(photoUploadModal, {hidden: true});
     const session = await this.page.target().createCDPSession();
     session.on('Log.entryAdded', log => {
+      showMessage("CDP session logs \n")
       showMessage(log.source);
       showMessage(log.level);
       showMessage(log.text);
