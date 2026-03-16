@@ -26,7 +26,8 @@ import {LoggedOutUser} from '../../utilities/user/logged-out-user';
 import {ConsoleReporter} from '../../utilities/common/console-reporter';
 import {TopicManager} from '../../utilities/user/topic-manager';
 import path from 'path';
-import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
+import {PuppeteerScreenRecorder} from '../../lib/PuppeteerScreenRecorder';
+import {showMessage} from '../../utilities/common/show-message';
 
 const ROLES = testConstants.Roles;
 
@@ -194,6 +195,12 @@ describe('Curriculum Admin', function () {
   });
 
   afterAll(async function () {
+    const flushPromises = () =>
+      new Promise(resolve => {
+        showMessage('Flushing promises and closing browsers');
+        setTimeout(resolve, 0);
+      });
+    await flushPromises();
     await UserFactory.closeAllBrowsers();
   });
 });
