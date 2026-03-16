@@ -810,7 +810,7 @@ export class CurriculumAdmin extends TopicManager {
     await this.clickOnElementWithSelector(createTopicButton);
     await this.waitForNetworkIdle();
     showMessage('Create topic button clicked!!');
-
+    await this.page.bringToFront();
     await this.page.waitForSelector('.e2e-test-topics-table');
     await this.openTopicEditor(name);
     await this.page.waitForSelector(topicMetaTagInput);

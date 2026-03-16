@@ -81,12 +81,8 @@ export class pageVideoStreamCollector extends EventEmitter {
     if (!currentSession) {
       return;
     }
-    try {
       showMessage('Stopping current screencast session: ' + this.page.url());
       await currentSession.send('Page.stopScreencast');
-    } catch (e: any) {
-      showMessage('Error stopping screencast' + e!.message);
-    }
   }
 
   private async startSession(page: Page): Promise<void> {
