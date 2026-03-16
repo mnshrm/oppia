@@ -68,20 +68,20 @@ export class TopicCreationService {
         // opening a new tab), some browsers block it as a popup. Here, the
         // new tab is created as soon as the user clicks the 'Create' button
         // and filled with URL once the details are fetched from the backend.
-        let newTab = this.windowRef.nativeWindow.open() as Window;
         let imagesData = this.imageLocalStorageService.getStoredImagesData();
         let bgColor = this.imageLocalStorageService.getThumbnailBgColor();
         if (bgColor === null) {
           throw new Error('Background color not found.');
         }
         this.topicCreationBackendApiService
-          .createTopicAsync(newlyCreatedTopic, imagesData, bgColor)
-          .then(
-            response => {
-              this.topicsAndSkillsDashboardBackendApiService.onTopicsAndSkillsDashboardReinitialized.emit();
-              this.topicCreationInProgress = false;
-              this.imageLocalStorageService.flushStoredImagesData();
-              this.pageContextService.resetImageSaveDestination();
+        .createTopicAsync(newlyCreatedTopic, imagesData, bgColor)
+        .then(
+          response => {
+            this.topicsAndSkillsDashboardBackendApiService.onTopicsAndSkillsDashboardReinitialized.emit();
+            this.topicCreationInProgress = false;
+            this.imageLocalStorageService.flushStoredImagesData();
+            this.pageContextService.resetImageSaveDestination();
+            let newTab = this.windowRef.nativeWindow.open() as Window;
               newTab.location.href =
                 this.urlInterpolationService.interpolateUrl(
                   this.TOPIC_EDITOR_URL_TEMPLATE,
@@ -91,7 +91,7 @@ export class TopicCreationService {
                 );
             },
             errorResponse => {
-              newTab.close();
+              // newTab.close();
               this.topicCreationInProgress = false;
               this.alertsService.addWarning(errorResponse.error);
             }
