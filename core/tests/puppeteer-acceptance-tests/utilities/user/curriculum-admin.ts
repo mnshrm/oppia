@@ -811,6 +811,12 @@ export class CurriculumAdmin extends TopicManager {
       showMessage(log.text);
       showMessage(log.category);
     });
+    session.on('Target.targetDestroyed', (target: puppeteer.Target) => {
+      showMessage('A target got destroyed' + target.url());
+    });
+    session.on('Target.detachedFromTarget', (target: puppeteer.Target) => {
+      showMessage('A target got detached' + target.url());
+    });
     this.page.on('popup', (newPage: puppeteer.Page) => {
       showMessage(`A popup happened for ${newPage.url()}`);
     });
